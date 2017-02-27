@@ -88,6 +88,20 @@ int int main() {
     // Se envia el mensaje. Los parametros son:
     // -Id de cola de mensajes.
     // -Dirección al mensaje, convirtiendola en un puntero a (struct msgbuf *)
+    //- Tamaño total de los campos de datos de nuestro mensaje, es decir
+    // de Dato_Numerico y de Mensaje
+    // Unos flafs. IPC_NOWAIT indicaque si el menssje no se puede enviar
+    // (habitualmente por que la cola de mensaje esta llena), que no espere
+    // y de error. si no se pone este flag, el programa queda bloqueado
+    // hasta que se se pueda enviar el mensaje.
 
+    sleep(10);
+
+    //
+    msgsnd(Id_Cola_Mensajes, (struct msgbuf *)& Un_Mensaje,
+      sizeof(Un_Mensaje.Dato_Numerico) + sizeof(Un_Mensaje),
+      IPC_NOWAIT);
+    printf("ya envie\n");
+    
   return 0;
 }
