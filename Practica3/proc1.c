@@ -81,5 +81,26 @@ strcpy (Un_Mensaje[2].Mensaje, "Hola2");
   // -Dirección del sitio en el que queremos recibir el mensaje,
   // convirtiéndolo en puntero a (struct msgbuf*).
   // -Tamaño máximo de nuestos campos de datos.
+  // -Identificador del tipo de mensaje que queremos recibir. En este caso
+  // se requiere un mensaje de tipo 2. Si ponemos tipo 1, se extrae el mensaje
+  // que llegue un mensaje tipo 2. Si se pone IPC_NOWAIT, se devolvería
+  // un error en caso de que no haya mensaje de tipo 2 y el programa continuaría
+  // ejecutandose.
   //
+  msgrcv(Id_Cola_Mensajes, (struct msgbuf*)&Resp,
+    siseof(Resp.Dato_Numerico) + sizeof(Resp.Mensaje),
+    2, 0);
+
+    printf("Recibido mensaje tipo 2\n");
+    printf("Dato_Numerico = %d\n",Resp.Dato_Numerico);
+    printf("Mensaje = /s\n",Resp.Mensaje);
+    sleep(20);
+    //
+    // Se borra y cierra la cola de mensajes.
+    // IPC_RMID indica que se quiere borrar. El puntero del final son datos
+    // que se quieran pasar para otros comandos. IPC_RMID no necesita datos,
+    // así que se pasa como puntero NULL.
+    //
+    msgctl(Id_Cola_Mensajes, IPC_RMID, (struct msqid_ds *)NULL);
+    return 0;
 }
